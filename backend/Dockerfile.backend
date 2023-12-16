@@ -1,0 +1,33 @@
+# Start from the official Golang image to build the binary.
+FROM golang:1.20 as builder
+
+
+# Set the working directory in the container to /app
+WORKDIR /app
+
+# Copy go.mod and go.sum into the working directory
+COPY backend/go.mod backend/go.sum ./
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source code into the working directory
+COPY backend/ .
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+# Use a minimal alpine image for the final stage of the build
+FROM alpine:latest  
+
+# Set the working directory in the container to /app
+WORKDIR /app
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/main .
+
+# Expose port 8080 for the application
+EXPOSE 8080
+
+# Run the binary
+CMD ["./main"]

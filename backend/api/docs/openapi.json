@@ -1,0 +1,107 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Notr API",
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "summary": "Get all users",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "itemsPerPage",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of users",
+                        "schema": {
+                            "$ref": "#/definitions/UserReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "The user to create",
+                        "schema": {
+                            "$ref": "#/definitions/UserDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The created user",
+                        "schema": {
+                            "$ref": "#/definitions/UserReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "UserDTO": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username",
+                "password",
+                "email"
+            ]
+        },
+        "UserReturn": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

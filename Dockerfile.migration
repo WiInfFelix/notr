@@ -1,0 +1,7 @@
+FROM arigaio/atlas:latest
+
+WORKDIR /migrations
+
+COPY backend/ent/migrate /migrations/
+
+RUN atlas migrate apply --url postgres://postgres:postgres@db:5432/postgres?sslmode=disable --dir /migrations

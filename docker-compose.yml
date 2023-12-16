@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile.backend
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  frontend:
+    build:
+
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - 5000:5000
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: notr_db
+    ports:
+      - 5432:5432
+
+  migration:
+    image: arigao/atlas:latest
+    depends_on:
+      - db
